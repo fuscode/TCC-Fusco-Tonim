@@ -1,0 +1,20 @@
+#parametro contendo o tamanho do vetor
+param tf := 8784;
+
+#vetor que contem o indice e o valor do preco da energia a cada hora
+param p :=
+
+ 1 33.88
+
+ 2 39.24
+
+ 3 29.31
+
+ 4 29.78
+
+ 5 31.43
+ 
+ {...}
+ 
+ 8784 31.73
+ ;

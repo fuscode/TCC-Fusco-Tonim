@@ -1,0 +1,299 @@
+%% modeloABNT2_Poli.tex, v1.0 monaro
+%% Copyright 2015 by Athila e Monaro
+%%
+%% Este trabalho é uma adequação das normas de dissertações e teses
+%% da Universidade de São Paulo - USP de acordo com a Norma ABNT
+%%
+%%
+%% Quaisquer dúvidas favor enviar e-mail para:
+%%
+%% athila.uno@gmail.com ou
+%% renato.monaro@gmail.com
+%%
+
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% eesc: Modelo de Trabalho Acadêmico (tese de doutorado, dissertação de
+% mestrado e trabalhos monográficos em geral) em conformidade com 
+% ABNT NBR 14724:2011. Esta classe estende as funcionalidades da classe
+% abnTeX2 elaborada de forma a adequar os parâmetros exigidos pelas 
+% normas USP e da Escola Politécnica.
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------
+% Opções:
+% 	tesedr:     Formata documento para tese de doutorado
+%	qualidr:    Formata documento para qualificação de doutorado
+% 	dissertmst: Formata documento para dissertação de mestrado
+% 	qualimst:   Formata documento para qualificação de mestrado
+%	tcc:     Formata documento para trabalho de conclusão de curso 
+% ------------------------------------------------------------------------
+%\documentclass[qualimst]{poli}
+\documentclass[tcc]{poli}
+
+% ---
+% PACOTES
+% ---
+
+% ---
+% Pacotes fundamentais 
+% ---
+\usepackage{cmap}				% Mapear caracteres especiais no PDF
+\usepackage{lmodern}				% Usa a fonte Latin Modern			
+\usepackage{makeidx}            	% Cria o indice
+\usepackage{hyperref}  			% Controla a formação do índice
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}			% Indenta o primeiro parágrafo de cada seção.
+\usepackage{nomencl} 			% Lista de simbolos
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{lscape}
+\usepackage{amsmath}
+\usepackage{multirow,makecell}
+
+% ---
+
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo eesc
+% ---
+\usepackage{lipsum}				       % para geração de dummy text
+\usepackage[printonlyused]{acronym}
+\usepackage[table]{xcolor}
+% ---
+% Pacotes fusco
+% ---
+\include{code_configs}
+
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+%
+% Título:
+%	1. Título em português
+%	2. Título em inglês
+\titulo{Análise da receita potencial de arbitragem utilizando sistemas de armazenamento de energia elétrica em mercados de energia}{Analysis of the potential arbitrage income using electricity storage system in energy markets}
+%
+% Autor:
+%	1. Nome completo do autor
+%	2. Formato de nome para bibliografia
+\autor{Lucas Marquez Tonim
+
+Luis Felipe Viveiros Fusco} {Tonim, L. M.; Fusco, L. F. V.}
+%
+
+% Cidade
+\local{São Paulo}
+% Ano de defesa
+\data{2019}
+
+% ---
+% Inserir Área de concentração
+%
+% O comando \areaconcentracao deve ser definido apenas para documentos de pós-graduação.
+% Caso contrário deve-se considerar a necessidade do comando \enfase
+%\areaconcentracao{Sistemas Elétricos de Potência}
+% ---
+%
+% O comando \enfase deve ser definido apenas para documentos de TCC.
+% Caso o aluno tenha cursado os créditos necessários
+\enfase{Energia e Automação Elétricas}
+%
+% CUIDADO: Apenas um das opç?es acima deve ser escolhida para o documento
+% ---
+
+
+% Nome do orientador
+\orientador{Prof. Dr. Maurício Barbosa de Camargo Salles}
+% Nome do coorientador
+%\coorientador{Coorientador}
+% ---
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+% ---
+% Compila a lista de abreviaturas e siglas
+% ---
+\makenomenclature
+% ---
+% ---
+% Inserir ficha catalográfica
+%
+% Caso o comando \inserirfichacatalografica seja definido, a ficha catalográfica
+% será inserida atrás da folha de rosto. Caso contrário a página será deixada em
+% branco.
+%
+% CUIDADO: Esta opção deve ser preenchida antes do comando \maketitle
+% ---
+\inserirfichacatalografica{EPUSP-Catalogacao-na-Fonte.pdf}
+% ---
+
+% ---
+% Inserir folha de aprovação
+%
+% Caso o comando \inserirfolhaaprovacao seja definido, a a folha de aprovação
+% será inserida. Além disso, conforme Resolução CoPGr 5890, as informações 
+% de rodapé são inseridas apropriadamente na folha de rosto.
+%
+% CUIDADO: Esta opção deve ser preenchida antes do comando \maketitle
+% ---
+%%%%%%%%%%%%%\inserirfolhaaprovacao{folhaAprovacao.pdf}
+% ---
+
+% ----
+% Início do documento
+% ----
+
+\begin{document}
+
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+\pretextual
+% ---
+% Insere Capa, Folha de rosto, Ficha catalográfica (se inserida)
+% e folha de aprovação (se inserida).
+% ---
+\maketitle
+% ---
+% Dedicatória
+% ---
+%\imprimirdedicatoria{
+%Este trabalho é dedicado a nossas famílias.
+%}
+% ---
+% ---
+% Agradecimentos
+% ---
+%\imprimiragradecimentos{
+%Agradecimentos.
+%}
+% ---
+
+% ---
+% Epígrafe
+% ---
+%\imprimirepigrafe{
+%}
+% ---
+
+% ---
+% RESUMO e ABSTRACT
+% ---
+
+% Resumo em português
+
+\begin{resumo}{palavras chaves. eng eletrica. mercado livre. PJM. BESS. otimização. AMPL}
+%
+O constante desenvolvimento do mercado livre brasileiro de energia através de novas legislações, traz novidades para o mercado nacional que já estão melhor fundamentadas em alguns mercados estrangeiros. Como é o caso da precificação da energia elétrica em base horária, algo que já é realidade no mercado norte-americano PJM e que há previsão de chegar ao Brasil em meados de 2020. Este estudo propõe operar um sistema de armazenamento de energia elétrica à baterias de íons de lítio. O sistema será modelado considerando o envelhecimento das baterias. O objetivo é chegar a conclusões sobre a viabilidade econômica de praticar a arbitragem de energia considerando as condições de operação do sistema. Para tanto, serão adquiridos os preços da energia elétrica do mercado PJM em base horária, será feita a modelagem do envelhecimento da bateria na linguagem AMPL e por fim os dados serão consolidados num plataforma de \textit{business analytics}.
+
+\end{resumo}
+
+% Resumo em inglês
+
+\begin{abstract}{key words. electrical eng. energy market. PJM. BESS. optimization. AMPL}
+%
+The constant development of the Brazilian free energy market through new legislations, brings news to the national market that are already consolidate in some foreign markets. As the case with hourly priced electricity, something that is already a reality in the USA PJM market and that is expected to arrive in Brazil by 2020. This study proposes to operate a lithium-ion battery energy storage system on the PJM market. The system will be modeled considering the aging of the batteries. The objective is to come to conclusions about the monetary feasibility considering this operation as an investment. In order to achieve this, the electric energy prices of the PJM market will be acquired on an hourly basis, the aging of the battery will be modeled in the AMPL language and finally the data will be consolidated in a business analytics platform.
+%
+\end{abstract}
+% ---
+
+% ---
+% inserir lista de ilustrações
+% ---
+\listailustracoes
+% ---
+
+% ---
+% inserir lista de tabelas
+% ---
+%\listatabelas
+% ---
+% ---
+% inserir lista de abreviaturas e siglas
+% ---
+\listasiglas{abrev/Abreviaturas}
+% ---
+% ---
+% inserir o sumario
+% ---
+\sumario
+% ---
+
+% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+% ----------------------------------------------------------
+\mainmatter
+
+% ----------------------------------------------------------
+% Introdução
+% ----------------------------------------------------------
+\include{Introducao}
+
+% ----------------------------------------------------------
+%Desenvolvimento
+% ----------------------------------------------------------
+\include{Metodologia}
+%\include{Resultados}
+\include{Conclusao}
+
+% ----------------------------------------------------------
+% ELEMENTOS PÓS-TEXTUAIS
+% ----------------------------------------------------------
+\postextual
+
+% ----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
+\bibliography{bib/ref}
+
+% ----------------------------------------------------------
+% Glossário
+% ----------------------------------------------------------
+%
+%\glossary
+
+% ----------------------------------------------------------
+% Apêndices
+% ----------------------------------------------------------
+% ---
+% Inicia os apêndices
+% ---
+\begin{apendicesenv}
+% Imprime uma página indicando o início dos apêndices
+\partapendices
+
+\appendix
+
+\include{apendices/Scripts}
+
+\end{apendicesenv}
+% ---
+
+% ----------------------------------------------------------
+% Anexos
+% ----------------------------------------------------------
+% ---
+% Inicia os anexos
+% ---
+%\begin{anexosenv}
+% Imprime uma página indicando o início dos anexos
+%\partanexos
+% ---
+% Incluir Anexo
+% ---
+%\chapter{Morbi ultrices rutrum lorem.}
+%\lipsum[1-25]
+%\section{Test}
+%\lipsum[1-20]
+
+
+%\end{anexosenv}
+
+
+\end{document}
+
+

@@ -1,0 +1,158 @@
+Sub Definicao_nos()
+
+
+'Contador auxiliar para fazer o looping de determinacao da Zona pesquisada
+Dim Linha_zona As Long 
+'Variavel para receber o nome da zona
+Dim Nome_zona As String 
+' Variavel para iterar e chegar até o valor desejado
+Dim Average_Revenue As Variant 
+' Valor que quero atingir
+Dim Valor_desejado As Variant 
+' Multiplicador que estou utilizando no momento
+Dim Multiplicador_quadrante As Variant  
+Dim Max As Variant
+Dim Min As Variant
+Dim Linha_Average As Long
+Dim fator_multip_quad As Long
+'Determina a linha na tabela resultados para colar valores
+Dim Linha_copia As Long 
+Dim Linha_min As Long
+
+
+Linha_zona = 3 'Inicia a contagem na linha 3 da coluna B
+'Atribui a variavel Nome_zona a linha a ser pesquisada da aba Auxiliar
+Nome_zona = Sheets("Auxiliar").Cells(Linha_zona, 2).Value 
+
+
+'modulo para varrer as zonas
+Sheets("Aba Auxiliar").Range("A3") = Nome_zona
+Do While Nome_zona <> ""
+       
+' Filtra por nome da zona e BUS
+Sheets("DA - Revenue").Select
+' Filtra por Nome da Zona
+ActiveSheet.Range("$A$2:$DP$1000000").AutoFilter Field:=2, Criteria1:=Nome_zona 
+' Filtra apenas os BUS
+ActiveSheet.Range("$A$2:$DP$1000000").AutoFilter Field:=7, Criteria1:="'BUS'"   
+
+
+' Filtra do maior para o menor a coluna AN -> Media de 4MWh para o periodo
+ActiveWorkbook.Worksheets("DA - Revenue").AutoFilter.Sort.SortFields.Clear
+ActiveWorkbook.Worksheets("DA - Revenue").AutoFilter.Sort.SortFields.Add Key _
+        :=Range("AN3:AN1000000"), SortOn:=xlSortOnValues, Order:=xlDescending, _
+        DataOption:=xlSortNormal
+    With ActiveWorkbook.Worksheets("DA - Revenue").AutoFilter.Sort
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    
+' Utilizarei uma aba auxiliar para copiar o resultado do filtro e conseguir percorrer os valores da célula
+
+
+' Limpa a aba auxiliar para colar os valores novos
+    Sheets("Aba Auxiliar").Select
+    Range("A:XX").ClearContents
+    
+'Seleciona as celulas da aba DA-Revenue que quero copiar para a aba auxiliar
+    
+   'cola primeira parte
+    Sheets("DA - Revenue").Select
+    Range("A2:H2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Aba Auxiliar").Select
+    Range("A1:H1").Select
+    ActiveSheet.Paste
+    
+'cola segunda parte - neste caso estamos pegando a celula da coluna AN, que corresponde ao average revenue para 4MWh
+    Sheets("DA - Revenue").Select
+    Range("AN2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Aba Auxiliar").Select
+    Range("I1").Select
+    ActiveSheet.Paste
+    
+' Looping para achar o valor do quadrante
+Max = Range("I2").Value
+Min = Range("I2").End(xlDown).Value
+Average_Revenue = Max
+' Verificador apenas para printar e conseguir ver que está rodando
+    Sheets("Aba Auxiliar").Cells(1, 12) = Max
+    Sheets("Aba Auxiliar").Cells(2, 12) = Min
+    Sheets("Aba Auxiliar").Cells(3, 12) = Average_Revenue
+    
+For fator_multip_quad = 1 To 3
+    Multiplicador_quadrante = 0.25 * fator_multip_quad ' rodar multiplicadores quadrantes
+    Valor_desejado = Max - Multiplicador_quadrante * (Max - Min)
+    
+Linha_Average = 2
+
+
+    Do While Valor_desejado < Average_Revenue
+        Average_Revenue = Sheets("Aba Auxiliar").Cells(Linha_Average, 9).Value
+        Linha_Average = Linha_Average + 1
+    Loop
+
+
+    If Linha_Average > 2 Then
+    valor = Sheets("Aba Auxiliar").Cells(Linha_Average - 2, 9).Value
+    Else
+    Linha_Average = 2
+    End If
+    
+    If (Abs(Valor_desejado - Average_Revenue) > Abs(Valor_desejado - valor)) Then
+    Sheets("Aba Auxiliar").Select
+    Range(Cells(Linha_Average - 2, 1), Cells(Linha_Average - 2, 9)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Resultado").Activate
+    Linha_copia = Range("A1048576").End(xlUp).Row
+    Range(Cells(Linha_copia + 1, 1), Cells(Linha_copia + 1, 9)).Select
+    ActiveSheet.Paste
+' Pego o valor MAIOR que o valor desejado, pois a diferenca do ultimo Average_Revenue obtido eh menor que do proximo valor
+    Else
+    Sheets("Aba Auxiliar").Select
+    Range(Cells(Linha_Average - 1, 1), Cells(Linha_Average - 1, 9)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Resultado").Activate
+    Linha_copia = Range("A1048576").End(xlUp).Row
+    Range(Cells(Linha_copia + 1, 1), Cells(Linha_copia + 1, 9)).Select
+    ActiveSheet.Paste
+    End If
+    
+Next fator_multip_quad
+    'Valor Máximo de cada zona
+    Sheets("Aba Auxiliar").Select
+    Range("A2:I2").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Resultado").Activate
+    Linha_copia = Range("A1048576").End(xlUp).Row
+    Range(Cells(Linha_copia + 1, 1), Cells(Linha_copia + 1, 9)).Select
+    ActiveSheet.Paste
+    
+    'Valor Mínimo de cada zona
+    Sheets("Aba Auxiliar").Select
+    Linha_min = Range("A1048576").End(xlUp).Row
+    Range(Cells(Linha_min, 1), Cells(Linha_min, 9)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Resultado").Activate
+    Linha_copia = Range("A1048576").End(xlUp).Row
+    Range(Cells(Linha_copia + 1, 1), Cells(Linha_copia + 1, 9)).Select
+    ActiveSheet.Paste
+
+
+    Linha_zona = Linha_zona + 1
+    Nome_zona = Sheets("Auxiliar").Cells(Linha_zona, 2)
+    Loop
+    
+End Sub
